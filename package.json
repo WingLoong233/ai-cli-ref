@@ -1,0 +1,36 @@
+{
+  "name": "claude-ref",
+  "displayName": "Claude Ref",
+  "description": "Send file reference to Claude Code terminal",
+  "version": "0.0.1",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": { "vscode": "^1.75.0" },
+  "main": "./extension.js",
+  "activationEvents": ["onCommand:claude-ref.send"],
+  "contributes": {
+    "commands": [
+      {
+        "command": "claude-ref.send",
+        "title": "Send File Reference to Claude Terminal"
+      }
+    ],
+    "configuration": {
+      "title": "Claude Ref",
+      "properties": {
+        "claude-ref.keybinding": {
+          "type": "string",
+          "default": "ctrl+alt+c",
+          "description": "Default keybinding hint (actual binding is set via Keyboard Shortcuts UI: search 'claude-ref.send')"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "claude-ref.send",
+        "key": "ctrl+alt+c",
+        "when": "editorFocus"
+      }
+    ]
+  }
+}

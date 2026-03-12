@@ -1,0 +1,12 @@
+# Build artifact — distribute via GitHub Releases or attach to tag
+*.vsix
+
+# VS Code workspace-local settings
+.vscode/
+
+# Node (no deps now, but conventional)
+node_modules/
+
+# OS noise
+.DS_Store
+Thumbs.db
