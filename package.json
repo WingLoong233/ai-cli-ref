@@ -12,7 +12,8 @@
     "commands": [
       {
         "command": "claude-ref.send",
-        "title": "Send File Reference to Claude Terminal"
+        "category": "Claude Ref",
+        "title": "Insert File Reference to Claude"
       }
     ],
     "configuration": {
@@ -31,6 +32,15 @@
         "key": "ctrl+alt+c",
         "when": "editorFocus"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "claude-ref.send",
+          "when": "!explorerResourceIsFolder",
+          "group": "navigation"
+        }
+      ]
+    }
   }
 }

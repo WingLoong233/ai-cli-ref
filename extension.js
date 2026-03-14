@@ -1,18 +1,26 @@
 const vscode = require('vscode');
 
 function activate(context) {
-  const cmd = vscode.commands.registerCommand('claude-ref.send', () => {
-    const editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      vscode.window.showWarningMessage('No active editor');
-      return;
-    }
+  const cmd = vscode.commands.registerCommand('claude-ref.send', (uri) => {
+    let ref;
 
-    const relPath = vscode.workspace.asRelativePath(editor.document.uri);
-    const sel = editor.selection;
-    const ref = sel.isEmpty
-      ? `@${relPath}`
-      : `@${relPath}#${sel.start.line + 1}-${sel.end.line + 1}`;
+    if (uri) {
+      // Invoked from explorer context menu
+      const relPath = vscode.workspace.asRelativePath(uri);
+      ref = `\`@${relPath}\``;
+    } else {
+      // Invoked from keybinding (requires active editor)
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        vscode.window.showWarningMessage('No active editor');
+        return;
+      }
+      const relPath = vscode.workspace.asRelativePath(editor.document.uri);
+      const sel = editor.selection;
+      ref = sel.isEmpty
+        ? `\`@${relPath}\``
+        : `\`@${relPath}#${sel.start.line + 1}-${sel.end.line + 1}\``;
+    }
 
     const claudeTerminals = vscode.window.terminals.filter(t => t.name === 'claude');
     if (claudeTerminals.length === 0) {
