@@ -1,34 +1,39 @@
 {
-  "name": "claude-ref",
-  "displayName": "Claude Ref",
-  "description": "Send file reference to Claude Code terminal",
+  "name": "ai-cli-ref",
+  "displayName": "AI CLI Ref",
+  "description": "Send file references to AI CLI terminals (Claude Code, Qoder CLI, etc.)",
   "version": "0.0.1",
   "publisher": "local",
   "license": "MIT",
   "engines": { "vscode": "^1.75.0" },
   "main": "./extension.js",
-  "activationEvents": ["onCommand:claude-ref.send"],
+  "activationEvents": ["onCommand:ai-cli-ref.send"],
   "contributes": {
     "commands": [
       {
-        "command": "claude-ref.send",
-        "category": "Claude Ref",
-        "title": "Insert File Reference to Claude"
+        "command": "ai-cli-ref.send",
+        "category": "AI CLI Ref",
+        "title": "Insert File Reference to AI CLI Terminal"
       }
     ],
     "configuration": {
-      "title": "Claude Ref",
+      "title": "AI CLI Ref",
       "properties": {
-        "claude-ref.keybinding": {
+        "ai-cli-ref.terminalNames": {
+          "type": "array",
+          "default": ["claude", "qodercli"],
+          "description": "Terminal names to target. The extension will look for terminals with these names (e.g., 'claude' for Claude Code, 'qodercli' for Qoder CLI)."
+        },
+        "ai-cli-ref.keybinding": {
           "type": "string",
           "default": "ctrl+alt+c",
-          "description": "Default keybinding hint (actual binding is set via Keyboard Shortcuts UI: search 'claude-ref.send')"
+          "description": "Default keybinding hint (actual binding is set via Keyboard Shortcuts UI: search 'ai-cli-ref.send')"
         }
       }
     },
     "keybindings": [
       {
-        "command": "claude-ref.send",
+        "command": "ai-cli-ref.send",
         "key": "ctrl+alt+c",
         "when": "editorFocus"
       }
@@ -36,7 +41,7 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "claude-ref.send",
+          "command": "ai-cli-ref.send",
           "when": "!explorerResourceIsFolder",
           "group": "navigation"
         }
