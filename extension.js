@@ -1,13 +1,24 @@
 const vscode = require('vscode');
 
-function activate(context) {
-  const cmd = vscode.commands.registerCommand('ai-cli-ref.send', (uri) => {
+async function isDirectory(uri) {
+  try {
+    const stat = await vscode.workspace.fs.stat(uri);
+    return (stat.type & vscode.FileType.Directory) !== 0;
+  } catch {
+    return false;
+  }
+}
+
+async function activate(context) {
+  const cmd = vscode.commands.registerCommand('ai-cli-ref.send', async (uri) => {
     let ref;
 
     if (uri) {
       // Invoked from explorer context menu
       const relPath = vscode.workspace.asRelativePath(uri);
-      ref = `\`@${relPath}\``;
+      const isDir = await isDirectory(uri);
+      // Folders end with / in the reference
+      ref = isDir ? `\`@${relPath}/\`` : `\`@${relPath}\``;
     } else {
       // Invoked from keybinding (requires active editor)
       const editor = vscode.window.activeTextEditor;

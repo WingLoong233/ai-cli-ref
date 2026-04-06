@@ -25,9 +25,14 @@ Extensions panel → `...` menu → **Install from VSIX...**
 ## Usage
 
 1. Open a terminal running an AI CLI (e.g., `claude` or `qodercli`)
-2. Focus on a file in the editor
-3. Press `Ctrl+Alt+C` to send `@path/to/file` to the terminal
-4. Or select lines first to send `@path/to/file#10-20`
+2. Use one of these methods to insert a file reference:
+   - **Keybinding**: Press `Ctrl+Alt+C` to send `@path/to/file`
+   - **Explorer context menu**: Right-click a file or folder → "Insert File Reference"
+3. Select lines first to send `@path/to/file#10-20`
+
+## TODO
+
+- [ ] Fix editor context menu (right-click in editor area)
 
 ## Configuration
 

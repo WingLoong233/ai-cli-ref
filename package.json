@@ -42,7 +42,6 @@
       "explorer/context": [
         {
           "command": "ai-cli-ref.send",
-          "when": "!explorerResourceIsFolder",
           "group": "navigation"
         }
       ]
