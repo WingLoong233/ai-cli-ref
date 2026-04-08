@@ -24,6 +24,12 @@
           "default": ["claude", "qodercli"],
           "description": "Terminal names to target. The extension will look for terminals with these names (e.g., 'claude' for Claude Code, 'qodercli' for Qoder CLI)."
         },
+        "ai-cli-ref.pathMode": {
+          "type": "string",
+          "enum": ["absolute", "relative"],
+          "default": "absolute",
+          "description": "Path mode for file references. 'absolute' uses the full filesystem path (default); 'relative' uses the path relative to the workspace root."
+        },
         "ai-cli-ref.keybinding": {
           "type": "string",
           "default": "ctrl+alt+c",

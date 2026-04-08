@@ -9,16 +9,26 @@ async function isDirectory(uri) {
   }
 }
 
+function resolvePath(uri, useAbsolute) {
+  if (useAbsolute) {
+    return uri.fsPath;
+  }
+  return vscode.workspace.asRelativePath(uri);
+}
+
 async function activate(context) {
   const cmd = vscode.commands.registerCommand('ai-cli-ref.send', async (uri) => {
     let ref;
 
+    const config = vscode.workspace.getConfiguration('ai-cli-ref');
+    const useAbsolute = config.get('pathMode', 'absolute') !== 'relative';
+
     if (uri) {
       // Invoked from explorer context menu
-      const relPath = vscode.workspace.asRelativePath(uri);
+      const path = resolvePath(uri, useAbsolute);
       const isDir = await isDirectory(uri);
       // Folders end with / in the reference
-      ref = isDir ? `\`@${relPath}/\`` : `\`@${relPath}\``;
+      ref = isDir ? `\`@${path}/\`` : `\`@${path}\``;
     } else {
       // Invoked from keybinding (requires active editor)
       const editor = vscode.window.activeTextEditor;
@@ -26,14 +36,12 @@ async function activate(context) {
         vscode.window.showWarningMessage('No active editor');
         return;
       }
-      const relPath = vscode.workspace.asRelativePath(editor.document.uri);
+      const path = resolvePath(editor.document.uri, useAbsolute);
       const sel = editor.selection;
       ref = sel.isEmpty
-        ? `\`@${relPath}\``
-        : `\`@${relPath}#${sel.start.line + 1}-${sel.end.line + 1}\``;
+        ? `\`@${path}\``
+        : `\`@${path}#${sel.start.line + 1}-${sel.end.line + 1}\``;
     }
-
-    const config = vscode.workspace.getConfiguration('ai-cli-ref');
     const terminalNames = config.get('terminalNames', ['claude', 'qodercli']);
 
     const matchedTerminals = vscode.window.terminals.filter(t => terminalNames.includes(t.name));
