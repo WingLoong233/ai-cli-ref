@@ -1,4 +1,5 @@
 .vscode/**
 .vscodeignore
+.claude/**
 *.vsix
 node_modules/**
