@@ -48,7 +48,8 @@ async function activate(context) {
 
     const matchedTerminals = vscode.window.terminals.filter(t => terminalNames.includes(t.name));
     if (matchedTerminals.length === 0) {
-      vscode.window.showWarningMessage(`No AI CLI terminal found (looking for: ${terminalNames.join(', ')})`);
+      await vscode.env.clipboard.writeText(ref);
+      vscode.window.showInformationMessage('No AI CLI terminal found — reference has been copied to clipboard');
       return;
     }
 
