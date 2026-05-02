@@ -27,8 +27,9 @@ async function activate(context) {
       // Invoked from explorer context menu
       const path = resolvePath(uri, useAbsolute);
       const isDir = await isDirectory(uri);
-      // Folders end with / in the reference
-      ref = isDir ? `\`@${path}/\`` : `\`@${path}\``;
+      // Absolute path: `/path/to/file`; relative path: `@/path/to/file`
+      const prefix = useAbsolute ? '' : '@';
+      ref = isDir ? `\`${prefix}${path}/\`` : `\`${prefix}${path}\``;
     } else {
       // Invoked from keybinding (requires active editor)
       const editor = vscode.window.activeTextEditor;
@@ -37,10 +38,11 @@ async function activate(context) {
         return;
       }
       const path = resolvePath(editor.document.uri, useAbsolute);
+      const prefix = useAbsolute ? '' : '@';
       const sel = editor.selection;
       ref = sel.isEmpty
-        ? `\`@${path}\``
-        : `\`@${path}#${sel.start.line + 1}-${sel.end.line + 1}\``;
+        ? `\`${prefix}${path}\``
+        : `\`${prefix}${path}#${sel.start.line + 1}-${sel.end.line + 1}\``;
     }
     const terminalNames = config.get('terminalNames', ['claude', 'qodercli']);
 
