@@ -3,3 +3,4 @@
 .claude/**
 *.vsix
 node_modules/**
+test/**

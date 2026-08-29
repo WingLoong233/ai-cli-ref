@@ -2,7 +2,7 @@
   "name": "ai-cli-ref",
   "displayName": "AI CLI Ref",
   "description": "Send file references to AI CLI terminals (Claude Code, Qoder CLI, etc.)",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "local",
   "license": "MIT",
   "repository": {
@@ -12,6 +12,9 @@
   "engines": { "vscode": "^1.75.0" },
   "main": "./extension.js",
   "activationEvents": ["onCommand:ai-cli-ref.send"],
+  "scripts": {
+    "test": "node --test"
+  },
   "contributes": {
     "commands": [
       {
@@ -25,8 +28,11 @@
       "properties": {
         "ai-cli-ref.terminalNames": {
           "type": "array",
-          "default": ["claude", "qodercli"],
-          "description": "Terminal names to target. The extension will look for terminals with these names (e.g., 'claude' for Claude Code, 'qodercli' for Qoder CLI)."
+          "items": {
+            "type": "string"
+          },
+          "default": ["claude", "✳ *", "qodercli"],
+          "description": "Terminal name patterns to target. Matching is case-insensitive; '*' matches any number of characters and '?' matches one character."
         },
         "ai-cli-ref.pathMode": {
           "type": "string",

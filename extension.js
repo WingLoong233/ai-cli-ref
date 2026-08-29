@@ -1,4 +1,7 @@
 const vscode = require('vscode');
+const { matchesTerminalName } = require('./terminal-matcher');
+
+const DEFAULT_TERMINAL_NAMES = ['claude', '✳ *', 'qodercli'];
 
 async function isDirectory(uri) {
   try {
@@ -27,7 +30,7 @@ async function activate(context) {
       // Invoked from explorer context menu
       const path = resolvePath(uri, useAbsolute);
       const isDir = await isDirectory(uri);
-      // Absolute path: `/path/to/file`; relative path: `@/path/to/file`
+      // Absolute path: `/path/to/file`; relative path: `@path/to/file`
       const prefix = useAbsolute ? '' : '@';
       ref = isDir ? `\`${prefix}${path}/\`` : `\`${prefix}${path}\``;
     } else {
@@ -44,9 +47,11 @@ async function activate(context) {
         ? `\`${prefix}${path}\``
         : `\`${prefix}${path}#${sel.start.line + 1}-${sel.end.line + 1}\``;
     }
-    const terminalNames = config.get('terminalNames', ['claude', 'qodercli']);
 
-    const matchedTerminals = vscode.window.terminals.filter(t => terminalNames.includes(t.name));
+    const terminalNames = config.get('terminalNames', DEFAULT_TERMINAL_NAMES);
+    const matchedTerminals = vscode.window.terminals.filter(
+      terminal => matchesTerminalName(terminal.name, terminalNames),
+    );
     if (matchedTerminals.length === 0) {
       await vscode.env.clipboard.writeText(ref);
       vscode.window.showInformationMessage('No AI CLI terminal found — reference has been copied to clipboard');
@@ -54,7 +59,7 @@ async function activate(context) {
     }
 
     const active = vscode.window.activeTerminal;
-    const terminal = (active && terminalNames.includes(active.name) ? active : null)
+    const terminal = (active && matchesTerminalName(active.name, terminalNames) ? active : null)
       ?? matchedTerminals[matchedTerminals.length - 1];
 
     terminal.show();
